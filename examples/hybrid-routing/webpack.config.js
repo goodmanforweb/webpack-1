@@ -8,7 +8,7 @@ module.exports = {
 		pageB: "./bEntry",
 
 		// This file contains common modules but also the router entry
-		"commons": "./router"
+		commons: "./router"
 	},
 	output: {
 		path: path.join(__dirname, "js"),

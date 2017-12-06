@@ -3,7 +3,7 @@ var CommonsChunkPlugin = require("../../../../lib/optimize/CommonsChunkPlugin");
 module.exports = {
 	entry: {
 		main: "./index",
-		misc: "./second",
+		misc: "./second"
 	},
 	output: {
 		filename: "[name].js"
@@ -13,7 +13,7 @@ module.exports = {
 			name: "main",
 			minChunks: 2,
 			children: true,
-			deepChildren: true,
+			deepChildren: true
 		})
 	]
 };

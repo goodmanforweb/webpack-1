@@ -12,7 +12,5 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [
-		new ETP("style.css")
-	]
+	plugins: [new ETP("style.css")]
 };

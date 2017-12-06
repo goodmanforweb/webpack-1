@@ -10,5 +10,4 @@ module.exports = {
 		__filename: false
 	},
 	devtool: "cheap-source-map"
-
 };

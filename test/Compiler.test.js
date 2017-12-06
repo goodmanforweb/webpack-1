@@ -12,15 +12,15 @@ const Compiler = require("../lib/Compiler");
 describe("Compiler", () => {
 	function compile(entry, options, callback) {
 		const noOutputPath = !options.output || !options.output.path;
-		if(!options.mode) options.mode = "production";
+		if (!options.mode) options.mode = "production";
 		options = new WebpackOptionsDefaulter().process(options);
 		options.entry = entry;
 		options.context = path.join(__dirname, "fixtures");
-		if(noOutputPath) options.output.path = "/";
+		if (noOutputPath) options.output.path = "/";
 		options.output.pathinfo = true;
 		const logs = {
 			mkdirp: [],
-			writeFile: [],
+			writeFile: []
 		};
 
 		const c = webpack(options);
@@ -39,9 +39,9 @@ describe("Compiler", () => {
 				callback();
 			}
 		};
-		c.plugin("compilation", (compilation) => compilation.bail = true);
+		c.plugin("compilation", compilation => (compilation.bail = true));
 		c.run((err, stats) => {
-			if(err) throw err;
+			if (err) throw err;
 			should.strictEqual(typeof stats, "object");
 			const compilation = stats.compilation;
 			stats = stats.toJson({
@@ -51,7 +51,7 @@ describe("Compiler", () => {
 			should.strictEqual(typeof stats, "object");
 			stats.should.have.property("errors");
 			Array.isArray(stats.errors).should.be.ok();
-			if(stats.errors.length > 0) {
+			if (stats.errors.length > 0) {
 				stats.errors[0].should.be.instanceOf(Error);
 				throw stats.errors[0];
 			}
@@ -60,22 +60,23 @@ describe("Compiler", () => {
 		});
 	}
 
-	it("should compile a single file to deep output", (done) => {
-		compile("./c", {
-			output: {
-				path: "/what",
-				filename: "the/hell.js",
+	it("should compile a single file to deep output", done => {
+		compile(
+			"./c",
+			{
+				output: {
+					path: "/what",
+					filename: "the/hell.js"
+				}
+			},
+			(stats, files) => {
+				stats.logs.mkdirp.should.eql(["/what", "/what/the"]);
+				done();
 			}
-		}, (stats, files) => {
-			stats.logs.mkdirp.should.eql([
-				"/what",
-				"/what/the",
-			]);
-			done();
-		});
+		);
 	});
 
-	it("should compile a single file", (done) => {
+	it("should compile a single file", done => {
 		compile("./c", {}, (stats, files) => {
 			files.should.have.property("/main.js").have.type("string");
 			Object.keys(files).should.be.eql(["/main.js"]);
@@ -94,7 +95,7 @@ describe("Compiler", () => {
 		});
 	});
 
-	it("should compile a complex file", (done) => {
+	it("should compile a complex file", done => {
 		compile("./main1", {}, (stats, files) => {
 			files.should.have.property("/main.js").have.type("string");
 			Object.keys(files).should.be.eql(["/main.js"]);
@@ -116,7 +117,7 @@ describe("Compiler", () => {
 		});
 	});
 
-	it("should compile a file with transitive dependencies", (done) => {
+	it("should compile a file with transitive dependencies", done => {
 		compile("./abc", {}, (stats, files) => {
 			files.should.have.property("/main.js").have.type("string");
 			Object.keys(files).should.be.eql(["/main.js"]);
@@ -140,7 +141,7 @@ describe("Compiler", () => {
 		});
 	});
 
-	it("should compile a file with multiple chunks", (done) => {
+	it("should compile a file with multiple chunks", done => {
 		compile("./chunks", {}, (stats, files) => {
 			stats.chunks.length.should.be.eql(2);
 			files.should.have.property("/main.js").have.type("string");
@@ -162,7 +163,7 @@ describe("Compiler", () => {
 			bundle.should.not.containEql("fixtures");
 			chunk.should.not.containEql("fixtures");
 			bundle.should.containEql("webpackJsonp");
-			chunk.should.containEql("window[\"webpackJsonp\"] || []).push");
+			chunk.should.containEql('window["webpackJsonp"] || []).push');
 			done();
 		});
 	});
@@ -174,13 +175,13 @@ describe("Compiler", () => {
 				context: path.join(__dirname, "fixtures"),
 				output: {
 					path: "/",
-					pathinfo: true,
+					pathinfo: true
 				}
 			});
 		});
 		describe("parser", () => {
 			describe("plugin", () => {
-				it("invokes sets a 'compilation' plugin", (done) => {
+				it("invokes sets a 'compilation' plugin", done => {
 					compiler.plugin = sinon.spy();
 					compiler.parser.plugin();
 					compiler.plugin.callCount.should.be.exactly(1);
@@ -188,7 +189,7 @@ describe("Compiler", () => {
 				});
 			});
 			describe("apply", () => {
-				it("invokes sets a 'compilation' plugin", (done) => {
+				it("invokes sets a 'compilation' plugin", done => {
 					compiler.plugin = sinon.spy();
 					compiler.parser.apply();
 					compiler.plugin.callCount.should.be.exactly(1);
@@ -205,21 +206,21 @@ describe("Compiler", () => {
 				context: path.join(__dirname, "fixtures"),
 				output: {
 					path: "/",
-					pathinfo: true,
+					pathinfo: true
 				}
 			});
 		});
 		describe("purgeInputFileSystem", () => {
-			it("invokes purge() if inputFileSystem.purge", (done) => {
+			it("invokes purge() if inputFileSystem.purge", done => {
 				const mockPurge = sinon.spy();
 				compiler.inputFileSystem = {
-					purge: mockPurge,
+					purge: mockPurge
 				};
 				compiler.purgeInputFileSystem();
 				mockPurge.callCount.should.be.exactly(1);
 				done();
 			});
-			it("does NOT invoke purge() if !inputFileSystem.purge", (done) => {
+			it("does NOT invoke purge() if !inputFileSystem.purge", done => {
 				const mockPurge = sinon.spy();
 				compiler.inputFileSystem = null;
 				compiler.purgeInputFileSystem();
@@ -228,7 +229,7 @@ describe("Compiler", () => {
 			});
 		});
 		describe("isChild", () => {
-			it("returns booleanized this.parentCompilation", (done) => {
+			it("returns booleanized this.parentCompilation", done => {
 				compiler.parentCompilation = "stringyStringString";
 				const response1 = compiler.isChild();
 				response1.should.be.exactly(true);
@@ -278,12 +279,12 @@ describe("Compiler", () => {
 				context: path.join(__dirname, "fixtures"),
 				output: {
 					path: "/",
-					pathinfo: true,
+					pathinfo: true
 				}
 			});
 		});
 		describe("static method", () => {
-			it("should have an method, Watching", (done) => {
+			it("should have an method, Watching", done => {
 				const actual = new Compiler.Watching(compiler, 1000, err => err);
 				actual.running.should.be.exactly(true);
 				actual.constructor.name.should.be.exactly("Watching");
@@ -291,17 +292,20 @@ describe("Compiler", () => {
 			});
 		});
 		describe("constructor", () => {
-			it("constructs Watching.watchOptions correctly when passed a number, string, or object for watchOptions", (done) => {
+			it("constructs Watching.watchOptions correctly when passed a number, string, or object for watchOptions", done => {
 				const Watching1 = compiler.watch(1000, err => err);
-				const Watching2 = compiler.watch({
-					aggregateTimeout: 1000
-				}, err => err);
+				const Watching2 = compiler.watch(
+					{
+						aggregateTimeout: 1000
+					},
+					err => err
+				);
 				const Watching3 = compiler.watch("I am a string", err => err);
 				Watching1.watchOptions.aggregateTimeout.should.equal(Watching2.watchOptions.aggregateTimeout);
 				Watching3.watchOptions.aggregateTimeout.should.equal(200);
 				done();
 			});
-			it("invokes compiler.readRecords", (done) => {
+			it("invokes compiler.readRecords", done => {
 				compiler.readRecords = sinon.spy();
 				compiler.watch(1000, err => err);
 				compiler.readRecords.callCount.should.be.exactly(1);
@@ -309,7 +313,7 @@ describe("Compiler", () => {
 			});
 		});
 		describe("_done", () => {
-			it("invokes this.handler and turns this.running boolean to false when passed an error", (done) => {
+			it("invokes this.handler and turns this.running boolean to false when passed an error", done => {
 				const mockHandler = sinon.spy();
 				const Watching1 = compiler.watch(1000, mockHandler);
 				Watching1.running.should.be.exactly(true);
@@ -320,7 +324,7 @@ describe("Compiler", () => {
 			});
 		});
 		describe("invalidate", () => {
-			it("pauses this.watcher and sets this.watcher to null if this.watcher is true", (done) => {
+			it("pauses this.watcher and sets this.watcher to null if this.watcher is true", done => {
 				const mockPause = sinon.spy();
 				const Watching1 = compiler.watch(1000, err => err);
 				Watching1.watcher = {
@@ -331,7 +335,7 @@ describe("Compiler", () => {
 				should(Watching1.watcher).be.exactly(null);
 				done();
 			});
-			it("sets this.invalid to true if this.running is true, else this.invalid = false", (done) => {
+			it("sets this.invalid to true if this.running is true, else this.invalid = false", done => {
 				const Watching1 = compiler.watch(1000, err => err);
 				Watching1.invalid = false;
 				const response = Watching1.invalidate();
@@ -339,7 +343,7 @@ describe("Compiler", () => {
 				response.should.be.exactly(false);
 				done();
 			});
-			it("invokes this._go() if !this.running", (done) => {
+			it("invokes this._go() if !this.running", done => {
 				const Watching1 = compiler.watch(1000, err => err);
 				Watching1.running = false;
 				Watching1._go = sinon.spy();

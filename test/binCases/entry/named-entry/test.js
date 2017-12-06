@@ -10,4 +10,3 @@ module.exports = function testAssertions(code, stdout, stderr) {
 	stdout[7].should.match(/index\.js.*\{0\}/);
 	stderr.should.be.empty();
 };
-

@@ -8,7 +8,7 @@ module.exports = {
 		pageC: "./pageC",
 		adminPageA: "./adminPageA",
 		adminPageB: "./adminPageB",
-		adminPageC: "./adminPageC",
+		adminPageC: "./adminPageC"
 	},
 	output: {
 		path: path.join(__dirname, "js"),
@@ -27,6 +27,6 @@ module.exports = {
 		new CommonsChunkPlugin({
 			name: "c-commons",
 			chunks: ["pageC", "adminPageC"]
-		}),
+		})
 	]
 };

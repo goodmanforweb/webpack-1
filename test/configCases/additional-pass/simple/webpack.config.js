@@ -3,14 +3,11 @@ var testPlugin = function() {
 	this.plugin("compilation", function(compilation) {
 		var nr = counter++;
 		compilation.plugin("need-additional-pass", function() {
-			if(nr < 5)
-				return true;
+			if (nr < 5) return true;
 		});
 	});
 };
 
 module.exports = {
-	plugins: [
-		testPlugin
-	]
+	plugins: [testPlugin]
 };

@@ -10,4 +10,3 @@ module.exports = function testAssertions(code, stdout, stderr) {
 	stdout[7].should.match(/a\.js.*\{1\}/); // a.js should be in chunk 1
 	stderr.should.be.empty();
 };
-

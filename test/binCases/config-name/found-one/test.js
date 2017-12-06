@@ -7,4 +7,3 @@ module.exports = function testAssertions(code, stdout, stderr) {
 	stdout[5].should.containEql("./index2.js");
 	stderr.should.be.empty();
 };
-

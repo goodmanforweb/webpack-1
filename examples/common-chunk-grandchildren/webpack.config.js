@@ -17,7 +17,7 @@ module.exports = [
 				name: "main",
 				minChunks: 2,
 				children: true,
-				deepChildren: true,
+				deepChildren: true
 			})
 		]
 	},
@@ -36,7 +36,7 @@ module.exports = [
 				minChunks: 2,
 				async: true,
 				children: true,
-				deepChildren: true,
+				deepChildren: true
 			})
 		]
 	}

@@ -7,8 +7,22 @@ const fs = require("fs");
 const child_process = require("child_process");
 
 function spawn(args, options) {
-	if(process.env.running_under_istanbul) {
-		args = ["--no-deprecation", require.resolve("istanbul/lib/cli.js"), "cover", "--report", "none", "--print", "none", "--include-pid", "--dir", path.resolve("coverage"), "--", require.resolve("./helpers/exec-in-directory.js"), options.cwd].concat(args);
+	if (process.env.running_under_istanbul) {
+		args = [
+			"--no-deprecation",
+			require.resolve("istanbul/lib/cli.js"),
+			"cover",
+			"--report",
+			"none",
+			"--print",
+			"none",
+			"--include-pid",
+			"--dir",
+			path.resolve("coverage"),
+			"--",
+			require.resolve("./helpers/exec-in-directory.js"),
+			options.cwd
+		].concat(args);
 		options = Object.assign({}, options, {
 			cwd: undefined
 		});
@@ -19,23 +33,24 @@ function spawn(args, options) {
 function loadOptsFile(optsPath) {
 	// Options file parser from Mocha
 	// https://github.com/mochajs/mocha/blob/2bb2b9fa35818db7a02e5068364b0c417436b1af/bin/options.js#L25-L31
-	return fs.readFileSync(optsPath, "utf8")
+	return fs
+		.readFileSync(optsPath, "utf8")
 		.replace(/\\\s/g, "%20")
 		.split(/\s/)
 		.filter(Boolean)
-		.map((value) => value.replace(/%20/g, " "));
+		.map(value => value.replace(/%20/g, " "));
 }
 
 function getTestSpecificArguments(testDirectory) {
 	try {
 		return loadOptsFile(path.join(testDirectory, "test.opts"));
-	} catch(e) {
+	} catch (e) {
 		return null;
 	}
 }
 
 function convertToArrayOfLines(outputArray) {
-	if(outputArray.length === 0) return outputArray;
+	if (outputArray.length === 0) return outputArray;
 	return outputArray.join("").split("\n");
 }
 
@@ -43,9 +58,7 @@ function findTestsRecursive(readPath) {
 	const entries = fs.readdirSync(readPath);
 	const isAnyTests = entries.indexOf("test.js") !== -1;
 
-	const folders = entries
-		.map(entry => path.join(readPath, entry))
-		.filter(entry => fs.statSync(entry).isDirectory());
+	const folders = entries.map(entry => path.join(readPath, entry)).filter(entry => fs.statSync(entry).isDirectory());
 
 	const result = isAnyTests ? [readPath] : [];
 
@@ -78,30 +91,30 @@ describe("BinTestCases", function() {
 			error: []
 		};
 
-		if(asyncExists) {
+		if (asyncExists) {
 			describe(testName, function() {
 				it("should run successfully", function(done) {
 					this.timeout(10000);
 					const child = spawn([cmd].concat(args), opts);
 
-					child.on("close", (code) => {
+					child.on("close", code => {
 						env.code = code;
 					});
 
-					child.on("error", (error) => {
+					child.on("error", error => {
 						env.error.push(error);
 					});
 
-					child.stdout.on("data", (data) => {
+					child.stdout.on("data", data => {
 						env.stdout.push(data);
 					});
 
-					child.stderr.on("data", (data) => {
+					child.stderr.on("data", data => {
 						env.stderr.push(data);
 					});
 
 					setTimeout(() => {
-						if(env.code) {
+						if (env.code) {
 							done(`Watch didn't run ${env.error}`);
 						}
 
@@ -119,20 +132,20 @@ describe("BinTestCases", function() {
 
 					const child = spawn([cmd].concat(args), opts);
 
-					child.on("close", (code) => {
+					child.on("close", code => {
 						env.code = code;
 						done();
 					});
 
-					child.on("error", (error) => {
+					child.on("error", error => {
 						env.error.push(error);
 					});
 
-					child.stdout.on("data", (data) => {
+					child.stdout.on("data", data => {
 						env.stdout.push(data);
 					});
 
-					child.stderr.on("data", (data) => {
+					child.stderr.on("data", data => {
 						env.stderr.push(data);
 					});
 				});

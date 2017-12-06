@@ -17,16 +17,11 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.optimize.UglifyJsPlugin({
-			exclude: [
-				"vendors.js",
-				"extract.js"
-			]
+			exclude: ["vendors.js", "extract.js"]
 		}),
 		new webpack.optimize.UglifyJsPlugin({
 			extractComments: true,
-			include: [
-				"extract.js"
-			]
+			include: ["extract.js"]
 		}),
 		new webpack.optimize.UglifyJsPlugin({
 			uglifyOptions: {
@@ -34,9 +29,7 @@ module.exports = {
 					passes: 2
 				}
 			},
-			include: [
-				"compress.js"
-			]
+			include: ["compress.js"]
 		})
 	]
 };

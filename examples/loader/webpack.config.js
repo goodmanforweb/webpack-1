@@ -1,8 +1,6 @@
 module.exports = {
 	mode: "production",
 	module: {
-		rules: [
-			{ test: /\.css$/, loader: "css-loader" }
-		]
+		rules: [{ test: /\.css$/, loader: "css-loader" }]
 	}
 };

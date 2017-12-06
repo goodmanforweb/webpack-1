@@ -20,10 +20,12 @@ const createSingleCompiler = () => {
 };
 
 const createMultiCompiler = () => {
-	return createCompiler([{
-		context: path.join(__dirname, "fixtures"),
-		entry: "./a.js"
-	}]);
+	return createCompiler([
+		{
+			context: path.join(__dirname, "fixtures"),
+			entry: "./a.js"
+		}
+	]);
 };
 
 describe("WatcherEvents", function() {
@@ -45,7 +47,6 @@ describe("WatcherEvents", function() {
 		compiler.plugin("done", () => {
 			watcher.close();
 		});
-
 	});
 
 	it("should emit 'watch-close' when using multi-compiler mode and the compiler is not running", function(done) {
@@ -64,7 +65,5 @@ describe("WatcherEvents", function() {
 		compiler.plugin("done", () => {
 			watcher.close();
 		});
-
 	});
-
 });

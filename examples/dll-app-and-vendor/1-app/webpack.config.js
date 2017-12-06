@@ -7,12 +7,12 @@ module.exports = {
 	entry: "./example-app",
 	output: {
 		filename: "app.js",
-		path: path.resolve(__dirname, "js"),
+		path: path.resolve(__dirname, "js")
 	},
 	plugins: [
 		new webpack.DllReferencePlugin({
 			context: ".",
 			manifest: require("../0-vendor/js/vendor-manifest.json"), // eslint-disable-line
-		}),
-	],
+		})
+	]
 };

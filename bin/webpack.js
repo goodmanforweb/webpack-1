@@ -11,15 +11,18 @@ var ErrorHelpers = require("../lib/ErrorHelpers");
 // Local version replace global one
 try {
 	var localWebpack = require.resolve(path.join(process.cwd(), "node_modules", "webpack", "bin", "webpack.js"));
-	if(__filename !== localWebpack) {
+	if (__filename !== localWebpack) {
 		return require(localWebpack);
 	}
-} catch(e) {}
-var yargs = require("yargs")
-	.usage("webpack " + require("../package.json").version + "\n" +
+} catch (e) {}
+var yargs = require("yargs").usage(
+	"webpack " +
+		require("../package.json").version +
+		"\n" +
 		"Usage: https://webpack.js.org/api/cli/\n" +
 		"Usage without config file: webpack <entry> [<entry>] <output>\n" +
-		"Usage with config file: webpack");
+		"Usage with config file: webpack"
+);
 
 require("./config-yargs")(yargs);
 
@@ -27,17 +30,17 @@ var DISPLAY_GROUP = "Stats options:";
 var BASIC_GROUP = "Basic options:";
 
 yargs.options({
-	"json": {
+	json: {
 		type: "boolean",
 		alias: "j",
 		describe: "Prints the result as JSON."
 	},
-	"progress": {
+	progress: {
 		type: "boolean",
 		describe: "Print compilation progress in percentage",
 		group: BASIC_GROUP
 	},
-	"color": {
+	color: {
 		type: "boolean",
 		alias: "colors",
 		default: function supportsColor() {
@@ -136,12 +139,12 @@ yargs.options({
 		group: DISPLAY_GROUP,
 		describe: "Display details about errors"
 	},
-	"display": {
+	display: {
 		type: "string",
 		group: DISPLAY_GROUP,
 		describe: "Select display preset (verbose, detailed, normal, minimal, errors-only, none)"
 	},
-	"verbose": {
+	verbose: {
 		type: "boolean",
 		group: DISPLAY_GROUP,
 		describe: "Show more details"
@@ -155,36 +158,34 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 	Error.stackTraceLimit = 30;
 
 	// arguments validation failed
-	if(err && output) {
+	if (err && output) {
 		console.error(output);
 		process.exitCode = 1;
 		return;
 	}
 
 	// help or version info
-	if(output) {
+	if (output) {
 		console.log(output);
 		return;
 	}
 
-	if(argv.verbose) {
+	if (argv.verbose) {
 		argv["display"] = "verbose";
 	}
 
 	try {
 		var options = require("./convert-argv")(yargs, argv);
-	} catch(err) {
-		if(err.name !== "ValidationError") {
+	} catch (err) {
+		if (err.name !== "ValidationError") {
 			throw err;
 		}
 
 		var stack = ErrorHelpers.cleanUpWebpackOptions(err.stack, err.message);
 		var message = err.message + "\n" + stack;
 
-		if(argv.color) {
-			console.error(
-				`\u001b[1m\u001b[31m${message}\u001b[39m\u001b[22m`
-			);
+		if (argv.color) {
+			console.error(`\u001b[1m\u001b[31m${message}\u001b[39m\u001b[22m`);
 		} else {
 			console.error(message);
 		}
@@ -194,18 +195,18 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 	}
 
 	function ifArg(name, fn, init) {
-		if(Array.isArray(argv[name])) {
-			if(init) init();
+		if (Array.isArray(argv[name])) {
+			if (init) init();
 			argv[name].forEach(fn);
-		} else if(typeof argv[name] !== "undefined") {
-			if(init) init();
+		} else if (typeof argv[name] !== "undefined") {
+			if (init) init();
 			fn(argv[name], -1);
 		}
 	}
 
 	function processOptions(options) {
 		// process Promise
-		if(typeof options.then === "function") {
+		if (typeof options.then === "function") {
 			options.then(processOptions).catch(function(err) {
 				console.error(err.stack || err);
 				process.exit(1); // eslint-disable-line
@@ -217,9 +218,9 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 		var statsPresetToOptions = require("../lib/Stats.js").presetToOptions;
 
 		var outputOptions = options.stats;
-		if(typeof outputOptions === "boolean" || typeof outputOptions === "string") {
+		if (typeof outputOptions === "boolean" || typeof outputOptions === "string") {
 			outputOptions = statsPresetToOptions(outputOptions);
-		} else if(!outputOptions) {
+		} else if (!outputOptions) {
 			outputOptions = {};
 		}
 
@@ -228,25 +229,22 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 		});
 
 		outputOptions = Object.create(outputOptions);
-		if(Array.isArray(options) && !outputOptions.children) {
+		if (Array.isArray(options) && !outputOptions.children) {
 			outputOptions.children = options.map(o => o.stats);
 		}
-		if(typeof outputOptions.context === "undefined")
-			outputOptions.context = firstOptions.context;
+		if (typeof outputOptions.context === "undefined") outputOptions.context = firstOptions.context;
 
 		ifArg("env", function(value) {
-			if(outputOptions.env) {
+			if (outputOptions.env) {
 				outputOptions._env = value;
 			}
 		});
 
 		ifArg("json", function(bool) {
-			if(bool)
-				outputOptions.json = bool;
+			if (bool) outputOptions.json = bool;
 		});
 
-		if(typeof outputOptions.colors === "undefined")
-			outputOptions.colors = require("supports-color");
+		if (typeof outputOptions.colors === "undefined") outputOptions.colors = require("supports-color");
 
 		ifArg("sort-modules-by", function(value) {
 			outputOptions.modulesSort = value;
@@ -264,14 +262,12 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 			outputOptions.exclude = value;
 		});
 
-		if(!outputOptions.json) {
-			if(typeof outputOptions.cached === "undefined")
-				outputOptions.cached = false;
-			if(typeof outputOptions.cachedAssets === "undefined")
-				outputOptions.cachedAssets = false;
+		if (!outputOptions.json) {
+			if (typeof outputOptions.cached === "undefined") outputOptions.cached = false;
+			if (typeof outputOptions.cachedAssets === "undefined") outputOptions.cachedAssets = false;
 
 			ifArg("display-chunks", function(bool) {
-				if(bool) {
+				if (bool) {
 					outputOptions.modules = false;
 					outputOptions.chunks = true;
 					outputOptions.chunkModules = true;
@@ -279,43 +275,35 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 			});
 
 			ifArg("display-entrypoints", function(bool) {
-				if(bool)
-					outputOptions.entrypoints = true;
+				if (bool) outputOptions.entrypoints = true;
 			});
 
 			ifArg("display-reasons", function(bool) {
-				if(bool)
-					outputOptions.reasons = true;
+				if (bool) outputOptions.reasons = true;
 			});
 
 			ifArg("display-depth", function(bool) {
-				if(bool)
-					outputOptions.depth = true;
+				if (bool) outputOptions.depth = true;
 			});
 
 			ifArg("display-used-exports", function(bool) {
-				if(bool)
-					outputOptions.usedExports = true;
+				if (bool) outputOptions.usedExports = true;
 			});
 
 			ifArg("display-provided-exports", function(bool) {
-				if(bool)
-					outputOptions.providedExports = true;
+				if (bool) outputOptions.providedExports = true;
 			});
 
 			ifArg("display-optimization-bailout", function(bool) {
-				if(bool)
-					outputOptions.optimizationBailout = bool;
+				if (bool) outputOptions.optimizationBailout = bool;
 			});
 
 			ifArg("display-error-details", function(bool) {
-				if(bool)
-					outputOptions.errorDetails = true;
+				if (bool) outputOptions.errorDetails = true;
 			});
 
 			ifArg("display-origins", function(bool) {
-				if(bool)
-					outputOptions.chunkOrigins = true;
+				if (bool) outputOptions.chunkOrigins = true;
 			});
 
 			ifArg("display-max-modules", function(value) {
@@ -323,19 +311,16 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 			});
 
 			ifArg("display-cached", function(bool) {
-				if(bool)
-					outputOptions.cached = true;
+				if (bool) outputOptions.cached = true;
 			});
 
 			ifArg("display-cached-assets", function(bool) {
-				if(bool)
-					outputOptions.cachedAssets = true;
+				if (bool) outputOptions.cachedAssets = true;
 			});
 
-			if(!outputOptions.exclude)
-				outputOptions.exclude = ["node_modules", "bower_components", "components"];
+			if (!outputOptions.exclude) outputOptions.exclude = ["node_modules", "bower_components", "components"];
 
-			if(argv["display-modules"]) {
+			if (argv["display-modules"]) {
 				outputOptions.maxModules = Infinity;
 				outputOptions.exclude = undefined;
 				outputOptions.modules = true;
@@ -343,7 +328,7 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 		}
 
 		ifArg("hide-modules", function(bool) {
-			if(bool) {
+			if (bool) {
 				outputOptions.modules = false;
 				outputOptions.chunkModules = false;
 			}
@@ -355,14 +340,10 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 		var compiler;
 		try {
 			compiler = webpack(options);
-		} catch(err) {
-			if(err.name === "WebpackOptionsValidationError") {
-				if(argv.color)
-					console.error(
-						`\u001b[1m\u001b[31m${err.message}\u001b[39m\u001b[22m`
-					);
-				else
-					console.error(err.message);
+		} catch (err) {
+			if (err.name === "WebpackOptionsValidationError") {
+				if (argv.color) console.error(`\u001b[1m\u001b[31m${err.message}\u001b[39m\u001b[22m`);
+				else console.error(err.message);
 				// eslint-disable-next-line no-process-exit
 				process.exit(1);
 			}
@@ -370,39 +351,40 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 			throw err;
 		}
 
-		if(argv.progress) {
+		if (argv.progress) {
 			var ProgressPlugin = require("../lib/ProgressPlugin");
-			compiler.apply(new ProgressPlugin({
-				profile: argv.profile
-			}));
+			compiler.apply(
+				new ProgressPlugin({
+					profile: argv.profile
+				})
+			);
 		}
 
 		function compilerCallback(err, stats) {
-			if(!options.watch || err) {
+			if (!options.watch || err) {
 				// Do not keep cache anymore
 				compiler.purgeInputFileSystem();
 			}
-			if(err) {
+			if (err) {
 				lastHash = null;
 				console.error(err.stack || err);
-				if(err.details) console.error(err.details);
+				if (err.details) console.error(err.details);
 				process.exit(1); // eslint-disable-line
 			}
-			if(outputOptions.json) {
+			if (outputOptions.json) {
 				process.stdout.write(JSON.stringify(stats.toJson(outputOptions), null, 2) + "\n");
-			} else if(stats.hash !== lastHash) {
+			} else if (stats.hash !== lastHash) {
 				lastHash = stats.hash;
 				var statsString = stats.toString(outputOptions);
-				if(statsString)
-					process.stdout.write(statsString + "\n");
+				if (statsString) process.stdout.write(statsString + "\n");
 			}
-			if(!options.watch && stats.hasErrors()) {
+			if (!options.watch && stats.hasErrors()) {
 				process.exitCode = 2;
 			}
 		}
-		if(firstOptions.watch || options.watch) {
+		if (firstOptions.watch || options.watch) {
 			var watchOptions = firstOptions.watchOptions || firstOptions.watch || options.watch || {};
-			if(watchOptions.stdin) {
+			if (watchOptions.stdin) {
 				process.stdin.on("end", function() {
 					process.exit(); // eslint-disable-line
 				});
@@ -410,11 +392,8 @@ yargs.parse(process.argv.slice(2), (err, argv, output) => {
 			}
 			compiler.watch(watchOptions, compilerCallback);
 			console.log("\nWebpack is watching the files…\n");
-		} else
-			compiler.run(compilerCallback);
-
+		} else compiler.run(compilerCallback);
 	}
 
 	processOptions(options);
-
 });

@@ -14,6 +14,6 @@ module.exports = {
 		}),
 		new CommonsChunkPlugin({
 			async: true
-		}),
+		})
 	]
 };

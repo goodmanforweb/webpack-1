@@ -5,4 +5,3 @@ module.exports = function testAssertions(code, stdout, stderr) {
 	stdout.should.be.empty();
 	stderr[0].should.containEql("Configuration with name 'foo' was not found.");
 };
-

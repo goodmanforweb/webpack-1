@@ -13,7 +13,7 @@ module.exports = function(yargs) {
 		.version()
 		.alias("version", "v")
 		.options({
-			"config": {
+			config: {
 				type: "string",
 				describe: "Path to the config file",
 				group: CONFIG_GROUP,
@@ -26,24 +26,24 @@ module.exports = function(yargs) {
 				group: CONFIG_GROUP,
 				requiresArg: true
 			},
-			"env": {
+			env: {
 				describe: "Environment passed to the config, when it is a function",
 				group: CONFIG_GROUP
 			},
-			"mode": {
+			mode: {
 				type: "string",
 				describe: "Mode to use (production or development)",
 				group: CONFIG_GROUP,
 				requiresArg: true
 			},
-			"context": {
+			context: {
 				type: "string",
 				describe: "The root directory for resolving entry point and stats",
 				group: BASIC_GROUP,
 				defaultDescription: "The current directory",
 				requiresArg: true
 			},
-			"entry": {
+			entry: {
 				type: "string",
 				describe: "The entry point",
 				group: BASIC_GROUP,
@@ -141,26 +141,26 @@ module.exports = function(yargs) {
 				group: ADVANCED_GROUP,
 				requiresArg: true
 			},
-			"define": {
+			define: {
 				type: "string",
 				describe: "Define any free var in the bundle",
 				group: ADVANCED_GROUP,
 				requiresArg: true
 			},
-			"target": {
+			target: {
 				type: "string",
 				describe: "The targeted execution environment",
 				group: ADVANCED_GROUP,
 				requiresArg: true
 			},
-			"cache": {
+			cache: {
 				type: "boolean",
 				describe: "Enable in memory caching",
 				default: null,
 				group: ADVANCED_GROUP,
 				defaultDescription: "It's enabled by default when watching"
 			},
-			"watch": {
+			watch: {
 				type: "boolean",
 				alias: "w",
 				describe: "Watch the filesystem for changes",
@@ -182,17 +182,17 @@ module.exports = function(yargs) {
 				describe: "The polling interval for watching (also enable polling)",
 				group: ADVANCED_GROUP
 			},
-			"hot": {
+			hot: {
 				type: "boolean",
 				describe: "Enables Hot Module Replacement",
 				group: ADVANCED_GROUP
 			},
-			"debug": {
+			debug: {
 				type: "boolean",
 				describe: "Switch loaders to debug mode",
 				group: BASIC_GROUP
 			},
-			"devtool": {
+			devtool: {
 				type: "string",
 				describe: "Enable devtool for better debugging experience (Example: --devtool eval-cheap-module-source-map)",
 				group: BASIC_GROUP,
@@ -205,7 +205,7 @@ module.exports = function(yargs) {
 				requiresArg: true
 			},
 			"resolve-extensions": {
-				"type": "array",
+				type: "array",
 				describe: "Setup extensions that should be used to resolve modules (Example: --resolve-extensions .es6,.js)",
 				group: RESOLVE_GROUP,
 				requiresArg: true
@@ -231,13 +231,13 @@ module.exports = function(yargs) {
 				describe: "Minimize javascript and switches loaders to minimizing",
 				group: OPTIMIZE_GROUP
 			},
-			"prefetch": {
+			prefetch: {
 				type: "string",
 				describe: "Prefetch this request (Example: --prefetch ./file.js)",
 				group: ADVANCED_GROUP,
 				requiresArg: true
 			},
-			"provide": {
+			provide: {
 				type: "string",
 				describe: "Provide these modules as free vars in all modules (Example: --provide jQuery=jquery)",
 				group: ADVANCED_GROUP,
@@ -248,33 +248,34 @@ module.exports = function(yargs) {
 				describe: "Enables labeled modules",
 				group: ADVANCED_GROUP
 			},
-			"plugin": {
+			plugin: {
 				type: "string",
 				describe: "Load this plugin",
 				group: ADVANCED_GROUP,
 				requiresArg: true
 			},
-			"bail": {
+			bail: {
 				type: "boolean",
 				describe: "Abort the compilation on first error",
 				group: ADVANCED_GROUP,
 				default: null
 			},
-			"profile": {
+			profile: {
 				type: "boolean",
 				describe: "Profile the compilation and include information in stats",
 				group: ADVANCED_GROUP,
 				default: null
 			},
-			"d": {
+			d: {
 				type: "boolean",
 				describe: "shortcut for --debug --devtool eval-cheap-module-source-map --output-pathinfo",
 				group: BASIC_GROUP
 			},
-			"p": {
+			p: {
 				type: "boolean",
-				describe: "shortcut for --optimize-minimize --define process.env.NODE_ENV=\"production\"",
+				describe: 'shortcut for --optimize-minimize --define process.env.NODE_ENV="production"',
 				group: BASIC_GROUP
 			}
-		}).strict();
+		})
+		.strict();
 };

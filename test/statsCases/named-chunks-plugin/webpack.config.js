@@ -5,8 +5,8 @@ var NamedModulesPlugin = require("../../../lib/NamedModulesPlugin");
 module.exports = {
 	mode: "production",
 	entry: {
-		"entry": "./entry",
-		"vendor": ["./modules/a", "./modules/b"],
+		entry: "./entry",
+		vendor: ["./modules/a", "./modules/b"]
 	},
 	plugins: [
 		new CommonsChunkPlugin({
@@ -14,6 +14,6 @@ module.exports = {
 			minChunks: Infinity
 		}),
 		new NamedChunksPlugin(),
-		new NamedModulesPlugin(),
+		new NamedModulesPlugin()
 	]
 };

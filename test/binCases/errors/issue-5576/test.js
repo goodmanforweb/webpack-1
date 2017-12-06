@@ -10,4 +10,3 @@ module.exports = function testAssertions(code, stdout, stderr) {
 
 	stderr.should.be.empty();
 };
-

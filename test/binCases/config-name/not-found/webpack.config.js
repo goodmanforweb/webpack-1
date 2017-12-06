@@ -1,3 +1,5 @@
-module.exports = [{
-	name: "bar"
-}];
+module.exports = [
+	{
+		name: "bar"
+	}
+];

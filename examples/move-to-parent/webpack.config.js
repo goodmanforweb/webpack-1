@@ -5,58 +5,63 @@ var outputOptions = {
 	filename: "[name].bundle.js",
 	chunkFilename: "[id].chunk.js"
 };
-module.exports = [{
-	name: "page",
-	mode: "production",
-	entry: {
-		page: "./page"
+module.exports = [
+	{
+		name: "page",
+		mode: "production",
+		entry: {
+			page: "./page"
+		},
+		output: outputOptions
 	},
-	output: outputOptions
-}, {
-	name: "pageA",
-	mode: "production",
-	entry: {
-		pageA: "./page"
+	{
+		name: "pageA",
+		mode: "production",
+		entry: {
+			pageA: "./page"
+		},
+		output: outputOptions,
+		plugins: [
+			//check for common modules in children of pageA and move them to the parent
+			new CommonsChunkPlugin({
+				name: "pageA",
+				children: true
+			})
+		]
 	},
-	output: outputOptions,
-	plugins: [
-		//check for common modules in children of pageA and move them to the parent
-		new CommonsChunkPlugin({
-			name: "pageA",
-			children: true
-		}),
-	]
-}, {
-	name: "pageB",
-	mode: "production",
-	entry: {
-		pageB: "./page"
+	{
+		name: "pageB",
+		mode: "production",
+		entry: {
+			pageB: "./page"
+		},
+		output: outputOptions,
+		plugins: [
+			// the same for pageB but move them if at least 3 children share the module
+			new CommonsChunkPlugin({
+				name: "pageB",
+				children: true,
+				minChunks: 3
+			})
+		]
 	},
-	output: outputOptions,
-	plugins: [
-		// the same for pageB but move them if at least 3 children share the module
-		new CommonsChunkPlugin({
-			name: "pageB",
-			children: true,
-			minChunks: 3
-		}),
-	]
-}, {
-	name: "pageC",
-	mode: "production",
-	entry: {
-		pageC: "./page"
-	},
-	output: outputOptions,
-	plugins: [
-		// the same for pageC and pageD but with a custom logic for moving
-		new CommonsChunkPlugin({
-			name: "pageC",
-			children: true,
-			minChunks: function(module, count) {
-				// move only module "b"
-				return !/b\.js/.test(module.identifier());
-			}
-		})
-	]
-}];
+	{
+		name: "pageC",
+		mode: "production",
+		entry: {
+			pageC: "./page"
+		},
+		output: outputOptions,
+		plugins: [
+			// the same for pageC and pageD but with a custom logic for moving
+			new CommonsChunkPlugin({
+				name: "pageC",
+				children: true,
+				minChunks: function(module, count) {
+					// move only module "b"
+					return !/b\.js/.test(module.identifier());
+				}
+			})
+		]
+	}
+];

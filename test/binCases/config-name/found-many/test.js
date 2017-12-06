@@ -8,4 +8,3 @@ module.exports = function testAssertions(code, stdout, stderr) {
 	stdout[13].should.containEql("./index3.js");
 	stderr.should.be.empty();
 };
-

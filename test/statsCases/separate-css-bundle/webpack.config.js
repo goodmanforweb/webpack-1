@@ -22,9 +22,7 @@ module.exports = [
 			filename: "[chunkhash].js"
 		},
 		module: moduleConfig,
-		plugins: [
-			new ExtractTextPlugin("[contenthash].css")
-		]
+		plugins: [new ExtractTextPlugin("[contenthash].css")]
 	},
 	{
 		mode: "production",
@@ -34,8 +32,6 @@ module.exports = [
 			filename: "[chunkhash].js"
 		},
 		module: moduleConfig,
-		plugins: [
-			new ExtractTextPlugin("[contenthash].css")
-		]
+		plugins: [new ExtractTextPlugin("[contenthash].css")]
 	}
 ];

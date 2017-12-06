@@ -8,9 +8,9 @@ module.exports = function testAssertions(code, stdout, stderr) {
 	stdout[1].should.containEql("Version: ");
 	stdout[2].should.containEql("Time: ");
 	stdout[3].should.containEql("Environment (--env): {");
-	stdout[4].should.containEql("\"prod\": [");
+	stdout[4].should.containEql('"prod": [');
 	stdout[7].should.containEql("],");
-	stdout[8].should.containEql("\"baz\": true");
+	stdout[8].should.containEql('"baz": true');
 	stdout[9].should.containEql("}");
 	stdout[11].should.containEql("null.js");
 	stdout[12].should.containEql("./index.js");

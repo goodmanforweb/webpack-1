@@ -11,18 +11,16 @@ module.exports = [
 	"hidden-source-map",
 	"inline-source-map",
 	"nosources-source-map",
-	"source-map",
+	"source-map"
 ].map(devtool => ({
 	mode: "development",
 	entry: {
-		bundle: "coffee-loader!./example.coffee",
+		bundle: "coffee-loader!./example.coffee"
 	},
 	output: {
 		path: path.join(__dirname, "js"),
-		filename: `./[name]-${devtool}.js`,
+		filename: `./[name]-${devtool}.js`
 	},
 	devtool,
-	plugins: [
-		new webpack.optimize.CommonsChunkPlugin(["manifest"]),
-	],
+	plugins: [new webpack.optimize.CommonsChunkPlugin(["manifest"])]
 }));

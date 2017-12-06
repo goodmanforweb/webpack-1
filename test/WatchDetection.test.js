@@ -9,10 +9,10 @@ const MemoryFs = require("memory-fs");
 const webpack = require("../");
 
 describe("WatchDetection", () => {
-	for(let changeTimeout = 0; changeTimeout < 100; changeTimeout += 10) {
+	for (let changeTimeout = 0; changeTimeout < 100; changeTimeout += 10) {
 		createTestCase(changeTimeout);
 	}
-	for(let changeTimeout = 100; changeTimeout <= 2000; changeTimeout += 100) {
+	for (let changeTimeout = 100; changeTimeout <= 2000; changeTimeout += 100) {
 		createTestCase(changeTimeout);
 	}
 
@@ -26,25 +26,25 @@ describe("WatchDetection", () => {
 			before(() => {
 				try {
 					fs.mkdirSync(fixturePath);
-				} catch(e) {}
+				} catch (e) {}
 				fs.writeFileSync(filePath, "require('./file2')", "utf-8");
 				fs.writeFileSync(file2Path, "original", "utf-8");
 			});
-			after((done) => {
+			after(done => {
 				setTimeout(() => {
 					try {
 						fs.unlinkSync(filePath);
-					} catch(e) {}
+					} catch (e) {}
 					try {
 						fs.unlinkSync(file2Path);
-					} catch(e) {}
+					} catch (e) {}
 					try {
 						fs.rmdirSync(fixturePath);
-					} catch(e) {}
+					} catch (e) {}
 					done();
 				}, 100); // cool down a bit
 			});
-			it("should build the bundle correctly", (done) => {
+			it("should build the bundle correctly", done => {
 				const compiler = webpack({
 					entry: loaderPath + "!" + filePath,
 					output: {
@@ -52,11 +52,10 @@ describe("WatchDetection", () => {
 						filename: "bundle.js"
 					}
 				});
-				const memfs = compiler.outputFileSystem = new MemoryFs();
+				const memfs = (compiler.outputFileSystem = new MemoryFs());
 				let onChange;
 				compiler.plugin("done", () => {
-					if(onChange)
-						onChange();
+					if (onChange) onChange();
 				});
 
 				let watcher;
@@ -65,13 +64,22 @@ describe("WatchDetection", () => {
 
 				function step1() {
 					onChange = () => {
-						if(memfs.readFileSync("/bundle.js") && memfs.readFileSync("/bundle.js").toString().indexOf("original") >= 0)
+						if (
+							memfs.readFileSync("/bundle.js") &&
+							memfs
+								.readFileSync("/bundle.js")
+								.toString()
+								.indexOf("original") >= 0
+						)
 							step2();
 					};
 
-					watcher = compiler.watch({
-						aggregateTimeout: 50
-					}, () => {});
+					watcher = compiler.watch(
+						{
+							aggregateTimeout: 50
+						},
+						() => {}
+					);
 				}
 
 				function step2() {
@@ -92,7 +100,12 @@ describe("WatchDetection", () => {
 
 				function step4() {
 					onChange = () => {
-						if(memfs.readFileSync("/bundle.js").toString().indexOf("correct") >= 0)
+						if (
+							memfs
+								.readFileSync("/bundle.js")
+								.toString()
+								.indexOf("correct") >= 0
+						)
 							step5();
 					};
 
@@ -108,7 +121,7 @@ describe("WatchDetection", () => {
 				}
 
 				function handleError(err) {
-					if(err) done(err);
+					if (err) done(err);
 				}
 			});
 		});

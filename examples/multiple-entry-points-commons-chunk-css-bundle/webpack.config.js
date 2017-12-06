@@ -7,7 +7,7 @@ module.exports = {
 	entry: {
 		A: "./a",
 		B: "./b",
-		C: "./c",
+		C: "./c"
 	},
 	output: {
 		path: path.join(__dirname, "js"),

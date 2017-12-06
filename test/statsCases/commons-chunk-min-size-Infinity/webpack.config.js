@@ -3,13 +3,13 @@ module.exports = {
 	mode: "production",
 	entry: {
 		"entry-1": "./entry-1",
-		"vendor-1": ["./modules/a", "./modules/b", "./modules/c"],
+		"vendor-1": ["./modules/a", "./modules/b", "./modules/c"]
 	},
 	plugins: [
 		new CommonsChunkPlugin({
 			name: "vendor-1",
 			minChunks: 1,
-			minSize: Infinity,
-		}),
+			minSize: Infinity
+		})
 	]
 };
